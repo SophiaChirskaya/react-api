@@ -1,53 +1,65 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
+import axios from "axios";
 
-const blogPosts = [
-    {
-      id: 1,
-      title: "Alla Scoperta delle Meraviglie Nascoste",
-      author: "Ann Swan",
-      content: "Scopri cinque luoghi poco conosciuti in Europa",
-      category: "Europe"
-    },
-    {
-      id: 2,
-      title: "Come Viaggiare con un Budget Ridotto",
-      author: "Brian Li",
-      content: "Ecco alcuni consigli su voli economici, alloggi alternativi",
-      category: "Africa"
-    },
-    {
-      id: 3,
-      title: "Diario di Viaggio: Esperienze Indimenticabili",
-      author: "Chloe Chang",
-      content: "Dalla Route 66 in USA: le strade più spettacolari da percorrere in auto o moto",
-      category: "America"
-    },
-    {
-      id: 4,
-      title: "I Migliori Posti per un Weekend Romantico",
-      author: "Dan Brown",
-      content: "Pad thai di Bangkok: un viaggio attraverso i migliori street food",
-      category: "Asia"
-    },
-    {
-      id: 5,
-      title: "Viaggiare da Soli: Consigli e Suggerimenti",
-      author: "Elly White",
-      content: "Great Ocean Road in Australia. Pronto a partire per un’avventura indimenticabile?",
-      category: "Australia"
-    } 
-    ];
+
+// const blogPosts = [
+//     {
+//       id: 1,
+//       title: "Alla Scoperta delle Meraviglie Nascoste",
+//       author: "Ann Swan",
+//       content: "Scopri cinque luoghi poco conosciuti in Europa",
+//       category: "Europe"
+//     },
+//     {
+//       id: 2,
+//       title: "Come Viaggiare con un Budget Ridotto",
+//       author: "Brian Li",
+//       content: "Ecco alcuni consigli su voli economici, alloggi alternativi",
+//       category: "Africa"
+//     },
+//     {
+//       id: 3,
+//       title: "Diario di Viaggio: Esperienze Indimenticabili",
+//       author: "Chloe Chang",
+//       content: "Dalla Route 66 in USA: le strade più spettacolari da percorrere in auto o moto",
+//       category: "America"
+//     },
+//     {
+//       id: 4,
+//       title: "I Migliori Posti per un Weekend Romantico",
+//       author: "Dan Brown",
+//       content: "Pad thai di Bangkok: un viaggio attraverso i migliori street food",
+//       category: "Asia"
+//     },
+//     {
+//       id: 5,
+//       title: "Viaggiare da Soli: Consigli e Suggerimenti",
+//       author: "Elly White",
+//       content: "Great Ocean Road in Australia. Pronto a partire per un’avventura indimenticabile?",
+//       category: "Australia"
+//     } 
+//     ];
 
     const initialFormData = {
         title: "",
-        author: "",
         content: "",
-        category: "",
+        image: "",
+        tags: "",
     };
 
     const BlogForm = () => {
-        const [posts, setPosts] = useState(blogPosts);
+        const [posts, setPosts] = useState([]);
         const [formData, setFormData] = useState(initialFormData);
+
+        function fetchPosts() {
+          axios.get("http://localhost:3000/posts")
+          .then((res) =>
+            setPosts(res.data)
+          
+        )
+        }
+
+        useEffect(fetchPosts, []);
 
         function handleFormData(e) {
             const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -89,14 +101,6 @@ const blogPosts = [
                 placeholder="Titolo blog"
                  />
 
-                <input
-                type="text"
-                name="author"
-                onChange={handleFormData}
-                value={formData.author}
-                placeholder="Autore del blog"
-                 />
-
                 <textarea
                 name="content"
                 onChange={handleFormData}
@@ -106,11 +110,19 @@ const blogPosts = [
 
                 <input
                 type="text"
-                name="category"
+                name="image"
                 onChange={handleFormData}
-                value={formData.category}
-                placeholder="Categoria"
+                value={formData.image}
+                placeholder="Imagine"
                  />
+
+                <input
+                type="text"
+                name="tags"
+                onChange={handleFormData}
+                value={formData.tags}
+                placeholder="Tags"
+                 /> 
                  <button>AGGIUNGI POST</button>
             </form>
 
@@ -122,9 +134,9 @@ const blogPosts = [
                 posts.map((post, I) => (
                     <div className="postItem" key={post.id}>
                         <h2>{post.title}</h2>
-                        <h2>{post.author}</h2>
                         <h2>{post.content}</h2>
-                        <h2>{post.category}</h2>
+                        <img src={post.image} alt={post.title} />
+                        <h2>{post.tags.join(", ")}</h2>
                         <button onClick={() => removePost(post.id)}>CANCELLA POST</button>
                     </div>
 
