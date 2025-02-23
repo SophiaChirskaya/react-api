@@ -82,7 +82,7 @@ import axios from "axios";
             // Chiamata API in POST inviando dati nuovo post
             axios.post("http://localhost:3000/posts", formData)
             .then(res => {
-                // Uso la risposta API per creare nuovo array dei posts
+            // Uso la risposta API per creare nuovo array dei posts
                 setPosts((currentPosts) => [...currentPosts, res.data])
             }
         )
