@@ -95,7 +95,17 @@ import axios from "axios";
             const updatedPosts = posts.filter((post,index) => {
               return index != i
             });
-            setPosts(updatedPosts);
+
+            // Chiamata API in DELETE
+            axios.delete(`http://localhost:3000/posts/${i}`)
+            .then(res =>
+                console.log(res),
+                setPosts(updatedPosts)    
+            )
+            .catch(err => console.log(err)
+            )
+
+
           }
 
         return (
