@@ -44,7 +44,7 @@ import axios from "axios";
         title: "",
         content: "",
         image: "",
-        tags: "",
+        tags: [],
     };
 
     const BlogForm = () => {
@@ -62,7 +62,7 @@ import axios from "axios";
         useEffect(fetchPosts, []);
 
         function handleFormData(e) {
-            const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+            const value = e.target.name === "tags" ? e.target.value.split(",") : e.target.value;
 
             setFormData((currentFormData) => ({
                 ...currentFormData,
@@ -72,12 +72,15 @@ import axios from "axios";
 
         function handleSubmit(e) {
             e.preventDefault();
-            setPosts((currentPosts) => [...currentPosts, {id: currentPosts[currentPosts.length - 1].id + 1, ...formData}]);
-            setPosts((currentPosts) => [...currentPosts, {
-                id:
-                currentPosts.length === 0 ? 1 : currentPosts[currentPosts.length - 1].id + 1,
-                ...formData
-            }]);
+            // setPosts((currentPosts) => [...currentPosts, {id: currentPosts[currentPosts.length - 1].id + 1, ...formData}]);
+            // setPosts((currentPosts) => [...currentPosts, {
+            //     id:
+            //     currentPosts.length === 0 ? 1 : currentPosts[currentPosts.length - 1].id + 1,
+            //     ...formData
+            // }]);
+
+            // Chiamata API in POST inviando dati nuovo post
+            axios.post("http://localhost:3000/posts", formData)
 
             setFormData(initialFormData);
         }
